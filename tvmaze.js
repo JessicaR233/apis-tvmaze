@@ -93,10 +93,14 @@ function populateShows(shows) {
 //   populateShows(shows);
 // }
 
-// $searchForm.on("submit", async function (evt) {
-//   evt.preventDefault();
-//   await searchForShowAndDisplay();
-// });
+$searchForm.on("submit", async function handleSearch(evt) {
+  evt.preventDefault();
+  let query = $('#search-query').val();
+  if(!query) return;
+  $episodesArea.hide();
+  let shows = await searchShows(query);
+  populateShows(shows); 
+});
 
 
 /** Given a show ID, get from API and return (promise) array of episodes:
