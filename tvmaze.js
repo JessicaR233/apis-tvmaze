@@ -63,9 +63,9 @@ function populateShows(shows) {
         `<div data-show-id="${show.id}" class="Show col-md-12 col-lg-6 mb-4">
          <div class="card">
            <img 
-              src=${show.image.medium}
+              src=${show.image}
               alt= ${show.name} 
-              class="w-25 mr-3">
+              class="card-img-top">
            <div class="media-body">
              <h5 class="text-primary">${show.name}</h5>
              <div><small>${show.summary}</small></div>
@@ -112,3 +112,27 @@ $searchForm.on("submit", async function handleSearch(evt) {
 /** Write a clear docstring for this function... */
 
 // function populateEpisodes(episodes) { }
+async function getEpisodes(showid) {
+  let response = await axios.get(`http://api.tvmaze.com/shows/${showid}/episodes`);
+  // console.log (show);
+  let episodes = response.data.map(episode => ({
+    id: episode.id,
+    name: episode.name,
+    season: episode.season,
+    number: episode.number
+  }))
+  return episodes;
+}
+
+function populateEpisodes (episodes) {
+  $('#episodes-list').empty();
+  for(let episode of episodes) {
+    const $episode =  $(
+      `<li>
+      ${episode.name}(season${episode.season},number${episode.number})
+      </li>`
+    )
+    $('#episodes-list').($episode);
+  }
+ 
+}
